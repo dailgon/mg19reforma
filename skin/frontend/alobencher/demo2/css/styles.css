@@ -3013,3 +3013,6 @@ span.select2-container--default .select2-selection--single .select2-selection__r
 .select2-container .select2-selection--single .select2-selection__rendered {
     padding-left: 4px;
 }
+.cms-catalogue-reforma {
+    overflow: scroll;
+}
