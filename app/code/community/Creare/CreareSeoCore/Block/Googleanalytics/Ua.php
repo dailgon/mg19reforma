@@ -4,7 +4,7 @@ class Creare_CreareSeoCore_Block_Googleanalytics_Ua extends Mage_GoogleAnalytics
 {
     /* Had to do it this way due to older versions of Magento */
 
-     protected function _toHtml()
+    protected function _toHtml()
     {
         if (!Mage::helper('googleanalytics')->isGoogleAnalyticsAvailable()) {
             return '';
@@ -12,6 +12,7 @@ class Creare_CreareSeoCore_Block_Googleanalytics_Ua extends Mage_GoogleAnalytics
         else {
 
             $accountId = Mage::getStoreConfig(Mage_GoogleAnalytics_Helper_Data::XML_PATH_ACCOUNT);
+            $pathToFile = Mage::getBaseUrl('js') . 'google/analytics.js';
 
             $html = "\r\n<!-- BEGIN UNIVERSAL ANALYTICS CODE -->
 <script type=\"text/javascript\">
@@ -19,9 +20,9 @@ class Creare_CreareSeoCore_Block_Googleanalytics_Ua extends Mage_GoogleAnalytics
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+})(window,document,'script','" . $pathToFile . "','ga');
 
-ga('create', '".$accountId."', 'auto');\r\n";
+ga('create', '" . $accountId . "', 'auto');\r\n";
     if ($this->enableDemographics())
         {
             $html .= "ga('require', 'displayfeatures');\r\n";
