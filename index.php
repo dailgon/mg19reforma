@@ -80,18 +80,4 @@ $mageRunCode = isset($_SERVER['MAGE_RUN_CODE']) ? $_SERVER['MAGE_RUN_CODE'] : ''
 /* Run store or run website */
 $mageRunType = isset($_SERVER['MAGE_RUN_TYPE']) ? $_SERVER['MAGE_RUN_TYPE'] : 'store';
 
-
-/*switch($_SERVER['HTTP_HOST']) {
-    case 'reforma-ua.itdelight.com':
-    case 'www.reforma-ua.itdelight.com':
-        $mageRunCode = 'ru';
-        $mageRunType = 'store';
-        break;
-    case 'reforma-ru.dev1.itdelight.com':
-    case 'www.reforma-ru.dev1.itdelight.com':
-        $mageRunCode = 'ua';
-        $mageRunType = 'store';
-        break;
-}
-*/
 Mage::run($mageRunCode, $mageRunType);
