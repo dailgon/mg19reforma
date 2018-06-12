@@ -266,8 +266,8 @@ $j(document).ready(function () {
     yepnope({
         test: Modernizr.csstransforms,
         yep: ['../js/catalogue/lib/turn.js'],
-        nope: ['../js/catalogue/lib/turn.html4.min.js'],
-        both: ['../js/catalogue/lib/zoom.min.js', '../js/catalogue/magazine/js/magazine.js', '../js/catalogue/magazine/css/magazine.css'],
+        nope: ['../js/catalogue/lib/turn.html4.js'],
+        both: ['../js/catalogue/lib/zoom.js', '../js/catalogue/magazine/js/magazine.js', '../js/catalogue/magazine/css/magazine.css'],
         complete: loadApp
     });
 });

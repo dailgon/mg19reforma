@@ -266,7 +266,7 @@ $j(document).ready(function () {
     yepnope({
         test: Modernizr.csstransforms,
         yep: ['lib/turn.js'],
-        nope: ['lib/turn.html4.min.js'],
+        nope: ['lib/turn.html4.js'],
         both: ['lib/zoom.min.js', 'magazine/js/magazine.js', 'magazine/css/magazine.css'],
         complete: loadApp
     });
