@@ -9,156 +9,156 @@
  * Hash.pushState(true);
  *
  * Hash.on('/page/([0-9]+)$',
- *	{yep: function(path, parts) { }, nop: function() { }},
- *	'Page $1');
+ *    {yep: function(path, parts) { }, nop: function() { }},
+ *    'Page $1');
  *
  * Hash.go('/page/1');
  **/
 
-(function() {
+(function($) {
 
-'use strict';
+    'use strict';
 
-var hashes = {},
-	regexp = {},
-	history = [],
-	freq = 100,
-	num = 0,
-	pushState = false,
-	timer = null,
-	currentUrl = null,
+    var hashes = {},
+        regexp = {},
+        history = [],
+        freq = 100,
+        num = 0,
+        pushState = false,
+        timer = null,
+        currentUrl = null,
 
-	freeze = function(obj) {
-		if (Object.freeze) return Object.freeze(obj);
-		return obj;
-	},
+        freeze = function (obj) {
+            if (Object.freeze) return Object.freeze(obj);
+            return obj;
+        },
 
-	getHashParts = function() {
-		return window.location.href.split('#');
-	},
+        getHashParts = function () {
+            return window.location.href.split('#');
+        },
 
-	startTimer = function() {
-		
-		if (!timer)
-			timer = setInterval(function() {
-				if (num>0 && currentUrl!=window.location.href) {
-					currentUrl = window.location.href;
-					window.Hash.check();
-				}
-			}, freq);
+        startTimer = function () {
 
-	},
+            if (!timer)
+                timer = setInterval(function () {
+                    if (num > 0 && currentUrl != window.location.href) {
+                        currentUrl = window.location.href;
+                        window.Hash.check();
+                    }
+                }, freq);
 
-	stopTimer = function() {
+        },
 
-		if (timer) {
-			clearInterval(timer);
-			timer = null;
-		}
+        stopTimer = function () {
 
-	};
+            if (timer) {
+                clearInterval(timer);
+                timer = null;
+            }
 
-window.Hash = freeze({
+        };
 
-		pushState: function(yes) {
+    window.Hash = freeze({
 
-			if (window.history && window.history.pushState)
-				pushState = yes;
+        pushState: function (yes) {
 
-			return this;
-		},
+            if (window.history && window.history.pushState)
+                pushState = yes;
 
-		fragment: function() {
-			
-			var hash = getHashParts();
-			return (pushState) ?
-				window.location.pathname + ((hash[1]) ? '#' + hash[1] : '')
-				: hash[1] || '';
+            return this;
+        },
 
-		},
-		
-		get: function(path, params) {
-			
-			var p, fragment = '', parameters = [];
+        fragment: function () {
 
-			for(p in params) {
-				if (!Object.prototype.hasOwnProperty(p))
-					continue;
-				parameters.push(encodeURIComponent(p) + '=' + encodeURIComponent(params[p]));
-			}
+            var hash = getHashParts();
+            return (pushState) ?
+                window.location.pathname + ((hash[1]) ? '#' + hash[1] : '')
+                : hash[1] || '';
 
-			if (parameters.length>0)
-				parameters = '?' + parameters.join('&');
-		
-			return (pushState) ? path + parameters :
-				getHashParts()[0] + '#' + path + parameters;
+        },
 
-		},
+        get: function (path, params) {
 
-		go: function(hash, params) {
+            var p, fragment = '', parameters = [];
 
-			if (this.fragment()!=hash) {
-				var to = this.get(hash, params);
+            for (p in params) {
+                if (!Object.prototype.hasOwnProperty(p))
+                    continue;
+                parameters.push(encodeURIComponent(p) + '=' + encodeURIComponent(params[p]));
+            }
 
-				if (pushState)
-					window.history.pushState(null, document.title, to);
-				else
-					window.location.href = to;
-				}
-			
-			return this;
-		},
+            if (parameters.length > 0)
+                parameters = '?' + parameters.join('&');
 
-		update: function () {
-			
-			currentUrl = window.location.href;
-			return this;
+            return (pushState) ? path + parameters :
+                getHashParts()[0] + '#' + path + parameters;
 
-		},
+        },
 
-		on: function(hash, callback, title) {
+        go: function (hash, params) {
 
-			if (!hashes[hash])
-				hashes[hash] = {title: title, listeners: []};
-			
-			hashes[hash].listeners.push(callback);
-			num++;
-			startTimer();
+            if (this.fragment() != hash) {
+                var to = this.get(hash, params);
 
-			return this;
-		},
+                if (pushState)
+                    window.history.pushState(null, document.title, to);
+                else
+                    window.location.href = to;
+            }
 
-		check: function() {
+            return this;
+        },
 
-			var i,
-				hash,
-				parts,
-				fragment = this.fragment();
+        update: function () {
+
+            currentUrl = window.location.href;
+            return this;
+
+        },
+
+        on: function (hash, callback, title) {
+
+            if (!hashes[hash])
+                hashes[hash] = {title: title, listeners: []};
+
+            hashes[hash].listeners.push(callback);
+            num++;
+            startTimer();
+
+            return this;
+        },
+
+        check: function () {
+
+            var i,
+                hash,
+                parts,
+                fragment = this.fragment();
 
 
-			for (hash in hashes) {
-				if (!Object.prototype.hasOwnProperty.call(hashes, hash))
-					continue;
+            for (hash in hashes) {
+                if (!Object.prototype.hasOwnProperty.call(hashes, hash))
+                    continue;
 
-				hashes[hash].regexp = hashes[hash].regexp || new RegExp(hash);
+                hashes[hash].regexp = hashes[hash].regexp || new RegExp(hash);
 
-				if ((parts = hashes[hash].regexp.exec(fragment))) {
-					if (hashes[hash].title)
-						document.title = hashes[hash].title;
+                if ((parts = hashes[hash].regexp.exec(fragment))) {
+                    if (hashes[hash].title)
+                        document.title = hashes[hash].title;
 
-					for (i = 0; i<hashes[hash].listeners.length; i++)
-						if (hashes[hash].listeners[i].yep)
-							hashes[hash].listeners[i].yep(fragment, parts);
-				} else {
-					for (i = 0; i<hashes[hash].listeners.length; i++)
-						if (hashes[hash].listeners[i].nop)
-							hashes[hash].listeners[i].nop(fragment);
-				}
+                    for (i = 0; i < hashes[hash].listeners.length; i++)
+                        if (hashes[hash].listeners[i].yep)
+                            hashes[hash].listeners[i].yep(fragment, parts);
+                } else {
+                    for (i = 0; i < hashes[hash].listeners.length; i++)
+                        if (hashes[hash].listeners[i].nop)
+                            hashes[hash].listeners[i].nop(fragment);
+                }
 
-			}
+            }
 
-			return this;
-		}
-});
+            return this;
+        }
+    });
 
-})();
+})(jQuery);
