@@ -265,9 +265,9 @@ $j(document).ready(function () {
 // Load the HTML4 version if there's not CSS transform
     yepnope({
         test: Modernizr.csstransforms,
-        yep: ['lib/turn.js'],
-        nope: ['lib/turn.html4.min.js'],
-        both: ['lib/zoom.min.js', 'magazine/js/magazine.js', 'magazine/css/magazine.css'],
+        yep: ['../js/catalogue/lib/turn.js'],
+        nope: ['../js/catalogue/lib/turn.html4.min.js'],
+        both: ['../js/catalogue/lib/zoom.min.js', '../js/catalogue/magazine/js/magazine.js', '../js/catalogue/magazine/css/magazine.css'],
         complete: loadApp
     });
 });
