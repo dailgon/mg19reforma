@@ -15,7 +15,7 @@
  * Hash.go('/page/1');
  **/
 
-(function($) {
+(function() {
 
     'use strict';
 
