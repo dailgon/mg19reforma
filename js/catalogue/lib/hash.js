@@ -58,7 +58,7 @@
 
         };
 
-    window.Hash = freeze({
+    window.jshash = freeze({
 
         pushState: function (yes) {
 
