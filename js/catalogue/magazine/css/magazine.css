@@ -394,5 +394,5 @@ body{
 }
 
 .breadcrumbs {
-	display: none;
+	display: none !important;
 }
