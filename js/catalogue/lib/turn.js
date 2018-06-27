@@ -110,7 +110,7 @@ var has3d,
 turnMethods = {
 
   // Singleton constructor
-  // $('#selector').turn([options]);
+  // $j('#selector').turn([options]);
 
   init: function(options) {
 
@@ -124,7 +124,7 @@ turnMethods = {
 
     // Set initial configuration
 
-    options = $.extend({
+    options = $j.extend({
       width: this.width(),
       height: this.height(),
       direction: this.attr('dir') || this.css('direction') || 'ltr'
@@ -140,10 +140,10 @@ turnMethods = {
     data.zoom = 1;
     data.totalPages = options.pages || 0;
     data.eventHandlers = {
-      touchStart: $.proxy(turnMethods._touchStart, this),
-      touchMove: $.proxy(turnMethods._touchMove, this),
-      touchEnd: $.proxy(turnMethods._touchEnd, this),
-      start: $.proxy(turnMethods._eventStart, this)
+      touchStart: $j.proxy(turnMethods._touchStart, this),
+      touchMove: $j.proxy(turnMethods._touchMove, this),
+      touchEnd: $j.proxy(turnMethods._touchEnd, this),
+      start: $j.proxy(turnMethods._eventStart, this)
     };
 
 
@@ -177,22 +177,22 @@ turnMethods = {
     // Add pages from the DOM
 
     for (i = 0; i<ch.length; i++) {
-      if ($(ch[i]).attr('ignore')!='1') {
+      if ($j(ch[i]).attr('ignore')!='1') {
         this.turn('addPage', ch[i], ++pageNum);
       }
     }
 
     // Event listeners
 
-    $(this).bind(mouseEvents.down, data.eventHandlers.touchStart).
+    $j(this).bind(mouseEvents.down, data.eventHandlers.touchStart).
       bind('end', turnMethods._eventEnd).
       bind('pressed', turnMethods._eventPressed).
       bind('released', turnMethods._eventReleased).
       bind('flip', turnMethods._flip);
 
-    $(this).parent().bind('start', data.eventHandlers.start);
+    $j(this).parent().bind('start', data.eventHandlers.start);
 
-    $(document).bind(mouseEvents.move, data.eventHandlers.touchMove).
+    $j(document).bind(mouseEvents.move, data.eventHandlers.touchMove).
       bind(mouseEvents.up, data.eventHandlers.touchEnd);
 
     // Set the initial page
@@ -221,7 +221,7 @@ turnMethods = {
 
     // Read the page number from the className of `element` - format: p[0-9]+
 
-    if ((currentPage = /\bp([0-9]+)\b/.exec($(element).attr('class'))))
+    if ((currentPage = /\bp([0-9]+)\b/.test($j(element).attr('class'))))
       page = parseInt(currentPage[1], 10);
 
     if (page) {
@@ -258,7 +258,7 @@ turnMethods = {
         data.totalPages = lastPage;
 
       // Add element
-      data.pageObjs[page] = $(element).
+      data.pageObjs[page] = $j(element).
         css({'float': 'left'}).
         addClass('page p' + page + className);
 
@@ -289,7 +289,7 @@ turnMethods = {
         if (!data.pageWrap[page]) {
 
           // Wrapper
-          data.pageWrap[page] = $('<div/>',
+          data.pageWrap[page] = $j('<div/>',
             {'class': 'page-wrapper',
               page: page,
               css: {position: 'absolute',
@@ -346,7 +346,7 @@ turnMethods = {
   center: function(page) {
     
     var data = this.data(),
-      size = $(this).turn('size'),
+      size = $j(this).turn('size'),
       left = 0;
 
     if (!data.noCenter) {
@@ -367,7 +367,7 @@ turnMethods = {
       
       }
 
-      $(this).css({marginLeft: left});
+      $j(this).css({marginLeft: left});
     }
 
     return this;
@@ -391,13 +391,13 @@ turnMethods = {
 
     data.destroying = true;
 
-    $.each(events, function(index, eventName) {
+    $j.each(events, function(index, eventName) {
       flipbook.unbind(eventName);
     });
 
     this.parent().unbind('start', data.eventHandlers.start);
 
-    $(document).unbind(mouseEvents.move, data.eventHandlers.touchMove).
+    $j(document).unbind(mouseEvents.move, data.eventHandlers.touchMove).
       unbind(mouseEvents.up, data.eventHandlers.touchEnd);
     
     while (data.totalPages!==0) {
@@ -447,7 +447,7 @@ turnMethods = {
     
       data.zoom = newZoom;
 
-      $(this).turn('stop').
+      $j(this).turn('stop').
         turn('size', newWidth, newHeight);
         /*.
         css({marginTop: size.height * iz / 2 - newHeight / 2});*/
@@ -455,7 +455,7 @@ turnMethods = {
       if (data.opts.autoCenter)
         this.turn('center');
       /*else
-        $(this).css({marginLeft: size.width * iz / 2 - newWidth / 2});*/
+        $j(this).css({marginLeft: size.width * iz / 2 - newWidth / 2});*/
 
       turnMethods._updateShadow.call(this);
 
@@ -813,7 +813,7 @@ turnMethods = {
 
     } else {
 
-      if ($.inArray(display, displays)==-1)
+      if ($j.inArray(display, displays)==-1)
         throw turnError('"'+display + '" is not a value for display');
       
       switch(display) {
@@ -825,7 +825,7 @@ turnMethods = {
             this.turn('stop').
               css({'overflow': 'hidden'});
 
-            data.pageObjs[0] = $('<div />',
+            data.pageObjs[0] = $j('<div />',
                 {'class': 'page p-temporal'}).
               css({width: this.width(), height: this.height()}).
               appendTo(this);
@@ -879,18 +879,18 @@ turnMethods = {
 
       dir = dir.toLowerCase();
 
-      if ($.inArray(dir, directions)==-1)
+      if ($j.inArray(dir, directions)==-1)
         throw turnError('"' + dir + '" is not a value for direction');
 
       if (dir=='rtl') {
-        $(this).attr('dir', 'ltr').
+        $j(this).attr('dir', 'ltr').
           css({direction: 'ltr'});
       }
 
       data.direction = dir;
 
       if (data.done)
-        this.turn('size', $(this).width(), $(this).height());
+        this.turn('size', $j(this).width(), $j(this).height());
 
       return this;
     }
@@ -944,7 +944,7 @@ turnMethods = {
     for (page in data.pages) {
       if (has(page, data.pages))
         data.pages[page].flip('disable',
-          (data.disabled) ? true : $.inArray(parseInt(page, 10), view)==-1);
+          (data.disabled) ? true : $j.inArray(parseInt(page, 10), view)==-1);
     }
 
     return this;
@@ -1230,16 +1230,16 @@ turnMethods = {
 
       if (trigger('turning', this, [page, newView])=='prevented') {
 
-        if (currentPage==data.page && $.inArray(place, data.pageMv)!=-1)
+        if (currentPage==data.page && $j.inArray(place, data.pageMv)!=-1)
           data.pages[place].flip('hideFoldedPage', true);
         
         return;
 
       }
 
-      if ($.inArray(1, newView)!=-1)
+      if ($j.inArray(1, newView)!=-1)
         this.trigger('first');
-      if ($.inArray(data.totalPages, newView)!=-1)
+      if ($j.inArray(data.totalPages, newView)!=-1)
         this.trigger('last');
 
     }
@@ -1319,7 +1319,7 @@ turnMethods = {
         if (page>0 && page<=data.totalPages) {
 
           if (page!=data.page) {
-            if (!data.done || $.inArray(page, this.turn('view'))!=-1)
+            if (!data.done || $j.inArray(page, this.turn('view'))!=-1)
               turnMethods._fitPage.call(this, page);
             else
               turnMethods._turnPage.call(this, page);
@@ -1405,7 +1405,7 @@ turnMethods = {
 
   _addMotionPage: function() {
 
-    var opts = $(this).data().f.opts,
+    var opts = $j(this).data().f.opts,
       turn = opts.turn,
       dd = turn.data();
 
@@ -1462,7 +1462,7 @@ turnMethods = {
 
   _eventEnd: function(e, opts, turned) {
   
-    var that = $(e.target),
+    var that = $j(e.target),
       data = that.data().f,
       turn = opts.turn,
       dd = turn.data();
@@ -1492,7 +1492,7 @@ turnMethods = {
   _eventPressed: function(e) {
 
     var page,
-      data = $(e.target).data().f,
+      data = $j(e.target).data().f,
       turn = data.opts.turn,
       turnData = turn.data(),
       pages = turnData.pages;
@@ -1510,7 +1510,7 @@ turnMethods = {
   _eventReleased: function(e, point) {
 
     var outArea,
-      page = $(e.target),
+      page = $j(e.target),
       data = page.data().f,
       turn = data.opts.turn,
       turnData = turn.data();
@@ -1540,7 +1540,7 @@ turnMethods = {
 
     e.stopPropagation();
 
-    var opts = $(e.target).data().f.opts;
+    var opts = $j(e.target).data().f.opts;
 
     opts.turn.trigger('turn', [opts.next]);
 
@@ -1658,7 +1658,7 @@ turnMethods = {
 
             p.flip('hover', false).
               flip('disable',
-                $.inArray(parseInt(page, 10), data.pageMv)==-1 &&
+                $j.inArray(parseInt(page, 10), data.pageMv)==-1 &&
                 page!=newView[0] &&
                 page!=newView[1]);
 
@@ -1709,7 +1709,7 @@ turnMethods = {
     view = this.turn('view');
 
     if (!data.shadow) {
-      data.shadow = $('<div />', {
+      data.shadow = $j('<div />', {
           'class': 'shadow',
           'css': divAtt(0, 0, 0).css
         }).
@@ -1820,7 +1820,7 @@ turnMethods = {
 
       // Set new values
 
-      $.extend(data.opts, options);
+      $j.extend(data.opts, options);
       
       // Set pages
 
@@ -1895,7 +1895,7 @@ flipMethods = {
     
     var data = this.data();
 
-    data.f = $.extend(data.f, d);
+    data.f = $j.extend(data.f, d);
 
     return this;
   },
@@ -1906,7 +1906,7 @@ flipMethods = {
 
     if (opts) {
       flipMethods.setData.call(this,
-        {opts: $.extend({}, data.opts || flipOptions, opts)});
+        {opts: $j.extend({}, data.opts || flipOptions, opts)});
       return this;
     } else
       return data.opts;
@@ -2010,7 +2010,7 @@ flipMethods = {
         break;
       }
 
-    return (!point.corner || $.inArray(point.corner, allowedCorners)==-1) ?
+    return (!point.corner || $j.inArray(point.corner, allowedCorners)==-1) ?
       false : point;
 
   },
@@ -2096,7 +2096,7 @@ flipMethods = {
          (data.opts.page!=2 && data.opts.page!=turnData.totalPages-1));
 
     if (gradient && !data.bshadow)
-      data.bshadow = $('<div/>', divAtt(0, 0, 1)).
+      data.bshadow = $j('<div/>', divAtt(0, 0, 1)).
         css({'position': '', width: this.width(), height: this.height()}).
         appendTo(data.parent);
 
@@ -2187,21 +2187,21 @@ flipMethods = {
         cssProperties[vendor + 'transform-style'] = 'preserve-3d';
         cssProperties[vendor + 'backface-visibility'] = 'hidden';
 
-        data.wrapper = $('<div/>', divAtt(0, 0, 2)).
+        data.wrapper = $j('<div/>', divAtt(0, 0, 2)).
           css(cssProperties).
           appendTo(parent).
           prepend(this);
 
-        data.fpage = $('<div/>', divAtt(0, 0, 1)).
+        data.fpage = $j('<div/>', divAtt(0, 0, 1)).
           css(cssProperties).
           appendTo(parent);
         
         if (turnData.opts.gradients) {
-          data.ashadow = $('<div/>', divAtt(0, 0,  0)).
+          data.ashadow = $j('<div/>', divAtt(0, 0,  0)).
             hide().
             appendTo(parent);
 
-          data.bshadow = $('<div/>', divAtt(0, 0,  0));
+          data.bshadow = $j('<div/>', divAtt(0, 0,  0));
         }
 
       break;
@@ -2214,7 +2214,7 @@ flipMethods = {
         data.fparent = data.opts.turn.data().fparent;
 
         if (!data.fparent) {
-          var fparent = $('<div/>', {css: {'pointer-events': 'none'}}).hide();
+          var fparent = $j('<div/>', {css: {'pointer-events': 'none'}}).hide();
             fparent.data().flips = 0;
             fparent.css(divAtt(0, 0, 'auto', 'visible').css).
             appendTo(data.opts.turn);
@@ -2225,20 +2225,20 @@ flipMethods = {
 
         this.css({position: 'absolute', top: 0, left: 0, bottom: 'auto', right: 'auto'});
 
-        data.wrapper = $('<div/>', divAtt(0, 0, this.css('z-index'))).
+        data.wrapper = $j('<div/>', divAtt(0, 0, this.css('z-index'))).
           appendTo(parent).
           prepend(this);
 
-        data.fwrapper = $('<div/>', divAtt(parent.offset().top, parent.offset().left)).
+        data.fwrapper = $j('<div/>', divAtt(parent.offset().top, parent.offset().left)).
           hide().
           appendTo(data.fparent);
 
-        data.fpage = $('<div/>', divAtt(0, 0, 0, 'visible')).
+        data.fpage = $j('<div/>', divAtt(0, 0, 0, 'visible')).
           css({cursor: 'default'}).
           appendTo(data.fwrapper);
 
         if (turnData.opts.gradients)
-          data.ashadow = $('<div/>', divAtt(0, 0,  1)).
+          data.ashadow = $j('<div/>', divAtt(0, 0,  1)).
           appendTo(data.fpage);
 
         flipMethods.setData.call(this, data);
@@ -2968,10 +2968,10 @@ flipMethods = {
 
     if (corner) {
 
-      if ($.inArray(corner, corners.all)==-1)
+      if ($j.inArray(corner, corners.all)==-1)
         throw turnError('Corner '+corner+' is not permitted');
 
-      if ($.inArray(corner, flipMethods._cAllowed.call(this))!=-1) {
+      if ($j.inArray(corner, flipMethods._cAllowed.call(this))!=-1) {
 
         var point = flipMethods._c.call(this, corner, data.opts.cornerSize/2);
         
@@ -3191,7 +3191,7 @@ function gradient(obj, p0, p1, colors, numColors) {
 
 function trigger(eventName, context, args) {
 
-  var event = $.Event(eventName);
+  var event = $j.Event(eventName);
   context.trigger(event, args);
   if (event.isDefaultPrevented())
     return 'prevented';
@@ -3252,16 +3252,16 @@ window.requestAnim = (function() {
 
 })();
 
-// Extend $.fn
+// Extend $j.fn
 
-$.extend($.fn, {
+$j.extend($j.fn, {
 
   flip: function() {
-    return dec($(this[0]), flipMethods, arguments);
+    return dec($j(this[0]), flipMethods, arguments);
   },
 
   turn: function() {
-    return dec($(this[0]), turnMethods, arguments);
+    return dec($j(this[0]), turnMethods, arguments);
   },
 
   transform: function(transform, origin) {
@@ -3320,7 +3320,7 @@ $.extend($.fn, {
       for (var i = 0; i < len; i++)
         diff.push(point.to[i] - point.from[i]);
 
-      data.effect = $.extend({
+      data.effect = $j.extend({
         stop: function() {
           animating = false;
         },
@@ -3343,10 +3343,10 @@ $.extend($.fn, {
 
 // Export some globals
 
-$.isTouch = isTouch;
-$.mouseEvents = mouseEvents;
-$.cssPrefix = getPrefix;
-$.cssTransitionEnd = getTransitionEnd;
-$.findPos = findPos;
+$j.isTouch = isTouch;
+$j.mouseEvents = mouseEvents;
+$j.cssPrefix = getPrefix;
+$j.cssTransitionEnd = getTransitionEnd;
+$j.findPos = findPos;
 
 })(jQuery);

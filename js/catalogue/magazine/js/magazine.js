@@ -7,7 +7,7 @@ function addPage(page, book) {
 	var id, pages = book.turn('pages');
 
 	// Create a new element for this page
-	var element = $('<div />', {});
+	var element = $j('<div />', {});
 
 	// Add the page to the flipbook
 	if (book.turn('addPage', element, page)) {
@@ -26,7 +26,7 @@ function loadPage(page, pageElement) {
 
 	// Create an image element
 
-	var img = $('<img />');
+	var img = $j('<img />');
 
 	img.mousedown(function(e) {
 		e.preventDefault();
@@ -35,11 +35,11 @@ function loadPage(page, pageElement) {
 	img.load(function() {
 		
 		// Set the size
-		$(this).css({width: '100%', height: '100%'});
+		$j(this).css({width: '100%', height: '100%'});
 
 		// Add the image to the page after loaded
 
-		$(this).appendTo(pageElement);
+		$j(this).appendTo(pageElement);
 
 		// Remove the loader indicator
 		
@@ -48,9 +48,9 @@ function loadPage(page, pageElement) {
 
 	// Load the page
 
-	img.attr('src', 'pages/' +  page + '.jpg');
+	img.attr('src', '../media/catalogue/' +  page + '.jpg');
 
-	loadRegions(page, pageElement);
+	// loadRegions(page, pageElement);
 
 }
 
@@ -59,13 +59,13 @@ function loadPage(page, pageElement) {
 function zoomTo(event) {
 
 		setTimeout(function() {
-			if ($('.magazine-viewport').data().regionClicked) {
-				$('.magazine-viewport').data().regionClicked = false;
+			if ($j('.magazine-viewport').data().regionClicked) {
+				$j('.magazine-viewport').data().regionClicked = false;
 			} else {
-				if ($('.magazine-viewport').zoom('value')==1) {
-					$('.magazine-viewport').zoom('zoomIn', event);
+				if ($j('.magazine-viewport').zoom('value')==1) {
+					$j('.magazine-viewport').zoom('zoomIn', event);
 				} else {
-					$('.magazine-viewport').zoom('zoomOut');
+					$j('.magazine-viewport').zoom('zoomOut');
 				}
 			}
 		}, 1);
@@ -78,10 +78,10 @@ function zoomTo(event) {
 
 function loadRegions(page, element) {
 
-	$.getJSON('pages/'+page+'-regions.json').
+	$j.getJSON('../media/catalogue/'+page+'-regions.json').
 		done(function(data) {
 
-			$.each(data, function(key, region) {
+			$j.each(data, function(key, region) {
 				addRegion(region, element);
 			});
 		});
@@ -91,8 +91,8 @@ function loadRegions(page, element) {
 
 function addRegion(region, pageElement) {
 	
-	var reg = $('<div />', {'class': 'region  ' + region['class']}),
-		options = $('.magazine').turn('options'),
+	var reg = $j('<div />', {'class': 'region  ' + region['class']}),
+		options = $j('.magazine').turn('options'),
 		pageWidth = options.width/2,
 		pageHeight = options.height;
 
@@ -101,7 +101,7 @@ function addRegion(region, pageElement) {
 		left: Math.round(region.x/pageWidth*100)+'%',
 		width: Math.round(region.width/pageWidth*100)+'%',
 		height: Math.round(region.height/pageHeight*100)+'%'
-	}).attr('region-data', $.param(region.data||''));
+	}).attr('region-data', $j.param(region.data||''));
 
 
 	reg.appendTo(pageElement);
@@ -111,17 +111,17 @@ function addRegion(region, pageElement) {
 
 function regionClick(event) {
 
-	var region = $(event.target);
+	var region = $j(event.target);
 
 	if (region.hasClass('region')) {
 
-		$('.magazine-viewport').data().regionClicked = true;
+		$j('.magazine-viewport').data().regionClicked = true;
 		
 		setTimeout(function() {
-			$('.magazine-viewport').data().regionClicked = false;
+			$j('.magazine-viewport').data().regionClicked = false;
 		}, 100);
 		
-		var regionType = $.trim(region.attr('class').replace('region', ''));
+		var regionType = $j.trim(region.attr('class').replace('region', ''));
 
 		return processRegion(region, regionType);
 
@@ -144,18 +144,18 @@ function processRegion(region, regionType) {
 		case 'zoom' :
 
 			var regionOffset = region.offset(),
-				viewportOffset = $('.magazine-viewport').offset(),
+				viewportOffset = $j('.magazine-viewport').offset(),
 				pos = {
 					x: regionOffset.left-viewportOffset.left,
 					y: regionOffset.top-viewportOffset.top
 				};
 
-			$('.magazine-viewport').zoom('zoomIn', pos);
+			$j('.magazine-viewport').zoom('zoomIn', pos);
 
 		break;
 		case 'to-page' :
 
-			$('.magazine').turn('page', data.page);
+			$j('.magazine').turn('page', data.page);
 
 		break;
 	}
@@ -166,20 +166,20 @@ function processRegion(region, regionType) {
 
 function loadLargePage(page, pageElement) {
 	
-	var img = $('<img />');
+	var img = $j('<img />');
 
 	img.load(function() {
 
 		var prevImg = pageElement.find('img');
-		$(this).css({width: '100%', height: '100%'});
-		$(this).appendTo(pageElement);
+		$j(this).css({width: '100%', height: '100%'});
+		$j(this).appendTo(pageElement);
 		prevImg.remove();
 		
 	});
 
 	// Loadnew page
 	
-	img.attr('src', 'pages/' +  page + '-large.jpg');
+	img.attr('src', '../media/catalogue/' +  page + '-large.jpg');
 }
 
 // Load small page
@@ -193,7 +193,7 @@ function loadSmallPage(page, pageElement) {
 	img.unbind('load');
 	// Loadnew page
 
-	img.attr('src', 'pages/' +  page + '.jpg');
+	img.attr('src', '../media/catalogue/' +  page + '.jpg');
 }
 
 // http://code.google.com/p/chromium/issues/detail?id=128488
@@ -206,34 +206,45 @@ function isChrome() {
 
 function disableControls(page) {
 		if (page==1)
-			$('.previous-button').hide();
+			$j('.previous-button').hide();
 		else
-			$('.previous-button').show();
+			$j('.previous-button').show();
 					
-		if (page==$('.magazine').turn('pages'))
-			$('.next-button').hide();
+		if (page==$j('.magazine').turn('pages'))
+			$j('.next-button').hide();
 		else
-			$('.next-button').show();
+			$j('.next-button').show();
 }
 
 // Set the width and height for the viewport
 
 function resizeViewport() {
 
-	var width = $(window).width(),
-		height = $(window).height(),
-		options = $('.magazine').turn('options');
+	var canvasElement = $j('#canvas'),
+		colMainElement = $j(canvasElement).parents('.col-main'),
+        containerElement = $j(canvasElement).find('.container'),
+		options = $j('.magazine').turn('options');
 
-	$('.magazine').removeClass('animated');
+	$j('.magazine').removeClass('animated');
+	$j(colMainElement).css({
+        'padding-right': 0,
+		'padding-left': 0
+	});
+    $j(containerElement).css({
+        'padding-right': 0,
+        'padding-left': 0
+    });
 
-	$('.magazine-viewport').css({
+    width = $j(canvasElement).width();
+    height = $j('#canvas').height()||600;
+
+	$j('.magazine-viewport').css({
 		width: width,
 		height: height
 	}).
 	zoom('resize');
 
-
-	if ($('.magazine').turn('zoom')==1) {
+	if ($j('.magazine').turn('zoom')==1) {
 		var bound = calculateBound({
 			width: options.width,
 			height: options.height,
@@ -245,37 +256,37 @@ function resizeViewport() {
 			bound.width-=1;
 
 			
-		if (bound.width!=$('.magazine').width() || bound.height!=$('.magazine').height()) {
+		if (bound.width!=$j('.magazine').width() || bound.height!=$j('.magazine').height()) {
 
-			$('.magazine').turn('size', bound.width, bound.height);
+			$j('.magazine').turn('size', bound.width, bound.height);
 
-			if ($('.magazine').turn('page')==1)
-				$('.magazine').turn('peel', 'br');
+			if ($j('.magazine').turn('page')==1)
+				$j('.magazine').turn('peel', 'br');
 
-			$('.next-button').css({height: bound.height, backgroundPosition: '-38px '+(bound.height/2-32/2)+'px'});
-			$('.previous-button').css({height: bound.height, backgroundPosition: '-4px '+(bound.height/2-32/2)+'px'});
+			$j('.next-button').css({height: bound.height, backgroundPosition: '-38px '+(bound.height/2-32/2)+'px'});
+			$j('.previous-button').css({height: bound.height, backgroundPosition: '-4px '+(bound.height/2-32/2)+'px'});
 		}
 
-		$('.magazine').css({top: -bound.height/2, left: -bound.width/2});
+		// $j('.magazine').css({top: -bound.height/2, left: -bound.width/2});
 	}
 
-	var magazineOffset = $('.magazine').offset(),
-		boundH = height - magazineOffset.top - $('.magazine').height(),
-		marginTop = (boundH - $('.thumbnails > div').height()) / 2;
+	var magazineOffset = $j('.magazine').offset(),
+		boundH = height - magazineOffset.top - $j('.magazine').height(),
+		marginTop = (boundH - $j('.thumbnails > div').height()) / 2;
 
 	if (marginTop<0) {
-		$('.thumbnails').css({height:1});
+		$j('.thumbnails').css({height:1});
 	} else {
-		$('.thumbnails').css({height: boundH});
-		$('.thumbnails > div').css({marginTop: marginTop});
+		$j('.thumbnails').css({height: boundH});
+		$j('.thumbnails > div').css({marginTop: marginTop});
 	}
 
-	if (magazineOffset.top<$('.made').height())
-		$('.made').hide();
+	if (magazineOffset.top<$j('.made').height())
+		$j('.made').hide();
 	else
-		$('.made').show();
+		$j('.made').show();
 
-	$('.magazine').addClass('animated');
+	$j('.magazine').addClass('animated');
 	
 }
 
@@ -294,7 +305,7 @@ function getViewNumber(book, page) {
 
 function moveBar(yes) {
 	if (Modernizr && Modernizr.csstransforms) {
-		$('#slider .ui-slider-handle').css({zIndex: yes ? -1 : 10000});
+		$j('#slider .ui-slider-handle').css({zIndex: yes ? -1 : 10000});
 	}
 }
 
@@ -303,8 +314,8 @@ function setPreview(view) {
 	var previewWidth = 112,
 		previewHeight = 73,
 		previewSrc = 'pages/preview.jpg',
-		preview = $(_thumbPreview.children(':first')),
-		numPages = (view==1 || view==$('#slider').slider('option', 'max')) ? 1 : 2,
+		preview = $j(_thumbPreview.children(':first')),
+		numPages = (view==1 || view==$j('#slider').slider('option', 'max')) ? 1 : 2,
 		width = (numPages==1) ? previewWidth/2 : previewWidth;
 
 	_thumbPreview.
@@ -312,7 +323,7 @@ function setPreview(view) {
 		css({width: width + 15,
 			height: previewHeight + 15,
 			top: -previewHeight - 30,
-			left: ($($('#slider').children(':first')).width() - width - 15)/2
+			left: ($j($j('#slider').children(':first')).width() - width - 15)/2
 		});
 
 	preview.css({

@@ -11,7 +11,7 @@
 /** @var Yireo_GoogleTagManager_Block_Head $block */
 
 ?>
-<?php if ($this->isEnabled() && (!isset($_SERVER['HTTP_USER_AGENT']) || stripos($_SERVER['HTTP_USER_AGENT'], 'Speed Insights') === false)) : ?>
+<?php if($this->isEnabled() && stripos($_SERVER['HTTP_USER_AGENT'], 'Google Page Speed Insights') === false) : ?>
     <script>
         var dataLayer = [];
         (function (w, d, s, l, i) {

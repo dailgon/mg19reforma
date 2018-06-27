@@ -74,7 +74,7 @@ class Magiccart_Alothemes_Block_Themecfg extends Mage_Core_Block_Template
 		$html ='';
 		$font 	= $cfg['font'];
 		/* get Lib Font */
-		if($font['google']) $html  = '<link rel="stylesheet" type="text/css" href="' .$protocol. '://fonts.googleapis.com/css?family='.str_replace(' ', '+', $font['google']).'" media="all" />';
+		if($font['google']) $html  = '<link class="test" rel="stylesheet" type="text/css" href="' .$protocol. '://fonts.googleapis.com/css?family='.str_replace(' ', '+', $font['google']).'" media="all" />';
 		$html  .= "\n"; // break line;
 		/* CssGenerator */
 		$html  .= '<style type="text/css">';

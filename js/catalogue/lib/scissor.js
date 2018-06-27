@@ -7,15 +7,15 @@
  * Cuts paper for you! and cardboard too ;)
  **/
 
-(function($) {
+(function($j) {
 
 'use strict';
 
-$.extend($.fn, {
+$j.extend($.fn, {
 	scissor: function() {
 		this.each(function() {
 
-			var element = $(this),
+			var element = $j(this),
 				pageProperties = {
 					width: element.width()/2,
 					height: element.height(),
@@ -23,8 +23,8 @@ $.extend($.fn, {
 				},
 				newElement = element.clone(true);
 
-				var leftPage = $('<div />', {css: pageProperties}),
-					rightPage = $('<div />', {css: pageProperties});
+				var leftPage = $j('<div />', {css: pageProperties}),
+					rightPage = $j('<div />', {css: pageProperties});
 
 				element.after(leftPage);
 				leftPage.after(rightPage);

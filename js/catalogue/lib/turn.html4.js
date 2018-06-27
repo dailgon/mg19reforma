@@ -107,7 +107,7 @@ var has3d,
 turnMethods = {
 
   // Singleton constructor
-  // $('#selector').turn([options]);
+  // $j('#selector').turn([options]);
 
   init: function(opts) {
 
@@ -122,7 +122,7 @@ turnMethods = {
 
     // Set initial configuration
 
-    opts = $.extend({
+    opts = $j.extend({
       width: this.width(),
       height: this.height(),
       direction: this.attr('dir') || this.css('direction') || 'ltr'
@@ -181,21 +181,21 @@ turnMethods = {
     // Add pages from the DOM
 
     for (i = 0; i<ch.length; i++) {
-      if ($(ch[i]).attr('ignore')!='1') {
+      if ($j(ch[i]).attr('ignore')!='1') {
         this.turn('addPage', ch[i], ++pageNum);
       }
     }
 
     // Event listeners
 
-    $(this).bind(mouseEvents.down, data.docEvents.mouseStart).
+    $j(this).bind(mouseEvents.down, data.docEvents.mouseStart).
       bind('start', turnMethods._start).
       bind('end', turnMethods._end).
       bind('pressed', turnMethods._pressed).
       bind('released', turnMethods._released).
       bind('flip', turnMethods._flip);
 
-    $(document).bind(mouseEvents.move, data.docEvents.mouseMove).
+    $j(document).bind(mouseEvents.move, data.docEvents.mouseMove).
       bind(mouseEvents.up, data.docEvents.mouseEnd);
 
     // Set the initial page
@@ -222,7 +222,7 @@ turnMethods = {
 
     // Read the page number from the className of `element` - format: p[0-9]+
 
-    if ((currentPage = /\bp([0-9]+)\b/.exec($(element).attr('class'))))
+    if ((currentPage = /\bp([0-9]+)\b/.test($j(element).attr('class'))))
       page = parseInt(currentPage[1], 10);
 
     if (page) {
@@ -259,7 +259,7 @@ turnMethods = {
         data.totalPages = lastPage;
 
       // Add element
-      data.pageObjs[page] = $(element).
+      data.pageObjs[page] = $j(element).
         css({'float': 'left'}).
         addClass('page p' + page + className);
 
@@ -299,7 +299,7 @@ turnMethods = {
           data.pagePlace[page] = page;
 
           // Wrapper
-          data.pageWrap[page] = $('<div/>',
+          data.pageWrap[page] = $j('<div/>',
             {'class': 'turn-page-wrapper',
               page: page,
               css: {position: 'absolute',
@@ -344,7 +344,7 @@ turnMethods = {
   center: function(page) {
     
     var data = this.data(),
-      size = $(this).turn('size'),
+      size = $j(this).turn('size'),
       left = size.width/(data.zoom*2) -size.width/2;
 
     if (data.display=='double') {
@@ -363,7 +363,7 @@ turnMethods = {
       }
     }
 
-    $(this).css({marginLeft: left});
+    $j(this).css({marginLeft: left});
 
     return this;
 
@@ -378,7 +378,7 @@ turnMethods = {
 
     data.destroying = true;
 
-    $(this).unbind(mouseEvents.down)
+    $j(this).unbind(mouseEvents.down)
       .unbind('end')
       .unbind('first')
       .unbind('flip')
@@ -390,7 +390,7 @@ turnMethods = {
       .unbind('turned')
       .unbind('zooming');
 
-    $(document).unbind(mouseEvents.move, data.docEvents.mouseMove).
+    $j(document).unbind(mouseEvents.move, data.docEvents.mouseMove).
       unbind(mouseEvents.up, data.docEvents.mouseEnd);
     
     while (data.totalPages!==0) {
@@ -429,27 +429,27 @@ turnMethods = {
       if (newZoom<0.001 || newZoom>100)
         throw turnError(newZoom+ ' is not a value for zoom');
     
-      var event = $.Event('zooming');
+      var event = $j.Event('zooming');
       this.trigger(event, [newZoom, data.zoom]);
 
       if (event.isDefaultPrevented())
         return this;
       
-      var size = $(this).turn('size'),
+      var size = $j(this).turn('size'),
         iz = 1/data.zoom,
         newWidth = Math.round(size.width * iz * newZoom),
         newHeight = Math.round(size.height * iz * newZoom);
     
       data.zoom = newZoom;
 
-      $(this).turn('stop').
+      $j(this).turn('stop').
         turn('size', newWidth, newHeight).
         css({marginTop: size.height * iz / 2 - newHeight / 2});
 
       if (data.opts.autoCenter)
         this.turn('center');
       else
-        $(this).css({marginLeft: size.width * iz / 2 - newWidth / 2});
+        $j(this).css({marginLeft: size.width * iz / 2 - newWidth / 2});
       
       turnMethods._updateShadow.call(this);
   
@@ -765,7 +765,7 @@ turnMethods = {
 
     if (display) {
 
-      if ($.inArray(display, displays)==-1)
+      if ($j.inArray(display, displays)==-1)
         throw turnError('"'+display + '" is not a value for display');
       
       if (display=='single') {
@@ -774,7 +774,7 @@ turnMethods = {
           this.turn('stop').
             css({'overflow': 'hidden'});
 
-          data.pageObjs[0] = $('<div />',
+          data.pageObjs[0] = $j('<div />',
               {'class': 'page p-temporal'}).
             css({width: this.width(), height: this.height()}).
             appendTo(this);
@@ -818,18 +818,18 @@ turnMethods = {
 
       dir = dir.toLowerCase();
 
-      if ($.inArray(dir, directions)==-1)
+      if ($j.inArray(dir, directions)==-1)
         throw turnError('"' + dir + '" is not a value for direction');
 
       if (dir=='rtl') {
-        $(this).attr('dir', 'ltr').
+        $j(this).attr('dir', 'ltr').
           css({direction: 'ltr'});
       }
 
       data.direction = dir;
 
       if (data.done)
-        this.turn('size', $(this).width(), $(this).height());
+        this.turn('size', $j(this).width(), $j(this).height());
 
       return this;
     }
@@ -856,7 +856,7 @@ turnMethods = {
 
     for (page in data.pages)
       if (has(page, data.pages))
-        data.pages[page].flip('disable', (bool) ? $.inArray(page, view) : false);
+        data.pages[page].flip('disable', (bool) ? $j.inArray(page, view) : false);
 
     return this;
 
@@ -1107,15 +1107,15 @@ turnMethods = {
   
     if (data.page!=page) {
 
-      var event = $.Event('turning');
+      var event = $j.Event('turning');
       this.trigger(event, [page, newView]);
 
       if (event.isDefaultPrevented())
         return;
 
-      if ($.inArray(1, newView)!=-1)
+      if ($j.inArray(1, newView)!=-1)
         this.trigger('first');
-      if ($.inArray(data.totalPages, newView)!=-1)
+      if ($j.inArray(data.totalPages, newView)!=-1)
         this.trigger('last');
 
     }
@@ -1190,7 +1190,7 @@ turnMethods = {
     var data = this.data();
 
     if (page>0 && page<=data.totalPages) {
-      if (!data.done || $.inArray(page, this.turn('view'))!=-1)
+      if (!data.done || $j.inArray(page, this.turn('view'))!=-1)
         turnMethods._fitPage.call(this, page);
       else
         turnMethods._turnPage.call(this, page);
@@ -1231,7 +1231,7 @@ turnMethods = {
 
   _addMotionPage: function() {
 
-    var opts = $(this).data().f.opts,
+    var opts = $j(this).data().f.opts,
       turn = opts.turn,
       dd = turn.data();
 
@@ -1278,7 +1278,7 @@ turnMethods = {
 
   _end: function(e, opts, turned) {
 
-    var that = $(e.target),
+    var that = $j(e.target),
       data = that.data().f,
       turn = opts.turn,
       dd = turn.data();
@@ -1307,7 +1307,7 @@ turnMethods = {
     e.stopPropagation();
 
     var page,
-      data = $(e.target).data().f,
+      data = $j(e.target).data().f,
       pages = data.opts.turn.data().pages;
 
     for (page in pages)
@@ -1325,7 +1325,7 @@ turnMethods = {
     e.stopPropagation();
 
     var outArea,
-      page = $(e.target),
+      page = $j(e.target),
       data = page.data().f,
       turn = data.opts.turn,
       turnData = turn.data();
@@ -1360,7 +1360,7 @@ turnMethods = {
 
     e.stopPropagation();
 
-    var opts = $(e.target).data().f.opts;
+    var opts = $j(e.target).data().f.opts;
 
     opts.turn.trigger('turn', [opts.next]);
 
@@ -1471,7 +1471,7 @@ turnMethods = {
     view = this.turn('view');
 
     if (!data.shadow) {
-      data.shadow = $('<div />',
+      data.shadow = $j('<div />',
       {
         'class': 'shadow',
         'css': divAtt(0, 0, 0).css
@@ -1567,7 +1567,7 @@ turnMethods = {
 
       // Set new values
 
-      $.extend(data.opts, options);
+      $j.extend(data.opts, options);
       
       // Set pages
 
@@ -1640,7 +1640,7 @@ flipMethods = {
     
     var data = this.data();
 
-    data.f = $.extend(data.f, d);
+    data.f = $j.extend(data.f, d);
 
     return this;
   },
@@ -1651,7 +1651,7 @@ flipMethods = {
 
     if (opts) {
       flipMethods.setData.call(this,
-        {opts: $.extend({}, data.opts || flipOptions, opts)});
+        {opts: $j.extend({}, data.opts || flipOptions, opts)});
       return this;
     } else
       return data.opts;
@@ -1722,7 +1722,7 @@ flipMethods = {
       return false;
 
 
-    return ($.inArray(c.corner, allowedCorners)==-1) ? false : c;
+    return ($j.inArray(c.corner, allowedCorners)==-1) ? false : c;
 
   },
 
@@ -1809,12 +1809,12 @@ flipMethods = {
         
       var cssProperties = {};
 
-      data.wrapper = $('<div/>', divAtt(0, 0, 2)).
+      data.wrapper = $j('<div/>', divAtt(0, 0, 2)).
         css(cssProperties).
         appendTo(parent).
         prepend(this);
 
-      data.fpage = $('<div/>', divAtt(0, 0, 1)).
+      data.fpage = $j('<div/>', divAtt(0, 0, 1)).
         css(cssProperties).
         appendTo(parent);
 
@@ -1930,7 +1930,7 @@ flipMethods = {
       
       var mAction = data.opts.turn.data().mouseAction;
 
-      var event = $.Event('start');
+      var event = $j.Event('start');
       this.trigger(event, [data.opts, c.corner]);
       visible = false;
 
@@ -2158,7 +2158,7 @@ flipMethods = {
     var data = this.data().f;
 
     if (!data.disabled && data.point) {
-      var event = $.Event('released');
+      var event = $j.Event('released');
       this.trigger(event, [data.point]);
       if (!event.isDefaultPrevented())
         flipMethods.hideFoldedPage.call(this, true);
@@ -2294,9 +2294,9 @@ function emptyFunction() {
 }
 
 
-// Extend $.fn
+// Extend $j.fn
 
-$.extend($.fn, {
+$j.extend($j.fn, {
 
   flip: function(req, opts) {
     return decorator(this, flipMethods, arguments);
@@ -2362,7 +2362,7 @@ $.extend($.fn, {
       for (var i = 0; i < len; i++)
         diff.push(point.to[i] - point.from[i]);
 
-      data.effect = $.extend({
+      data.effect = $j.extend({
         stop: function() {
           animating = false;
         },
@@ -2385,10 +2385,10 @@ $.extend($.fn, {
 
 // Export some globals
 
-$.isTouch = isTouch;
-$.mouseEvents = mouseEvents;
-$.cssPrefix = emptyFunction;
-$.cssTransitionEnd = emptyFunction;
-$.findPos = findPos;
+$j.isTouch = isTouch;
+$j.mouseEvents = mouseEvents;
+$j.cssPrefix = emptyFunction;
+$j.cssTransitionEnd = emptyFunction;
+$j.findPos = findPos;
 
 })(jQuery);
