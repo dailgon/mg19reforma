@@ -12,6 +12,9 @@ class Itdelight_OutOfStockSort_Model_Observer extends Varien_Event_Observer
      */
     public function outOfStockSort(Varien_Event_Observer $observer)
     {
+        if (Mage::registry('dontUseItDelightObserver')) {
+            return;
+        }
         if (!Mage::getStoreConfigFlag('cataloginventory/options/outofstock_to_end')) {
             return;
         }

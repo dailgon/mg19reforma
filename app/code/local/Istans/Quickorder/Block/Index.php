@@ -1,33 +1,40 @@
 <?php
 class Istans_Quickorder_Block_Index extends Mage_Catalog_Block_Product_Abstract
-
 {
-
-    public function _getProducts($catId = NULL)
+    public function _getProducts($catId = null)
     {
-        /* @var $productVisibility Mage_Catalog_Model_Product_Visibility */
-  /*      $productVisibility = Mage::getSingleton('catalog/product_visibility');
-        $this->_productCollection->setVisibility($productVisibility->getVisibleInCatalogIds());
-
-        $productStatus = Mage::getSingleton('catalog/product_status');
-        $this->_productCollection->addAttributeToFilter('status', array('in' => $productStatus->getVisibleStatusIds()));
-*/
         $sortName = Mage::app()->getRequest()->getParam('sort');
         $sortDir = Mage::app()->getRequest()->getParam('dir');
         if(!isset($sortDir))$sortDir='asc';
 
-        $collection = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('*');
-        $collection->addFieldToFilter('visibility', Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH)
+        /**
+         * @var $collection Mage_Catalog_Model_Resource_Product_Collection
+         */
+        $collection = Mage::getResourceModel('catalog/product_collection')
+            ->addAttributeToSelect('sku')
+            ->addAttributeToSelect('name')
+            ->addAttributeToSelect('price')
+            ->addAttributeToSelect('in_stock')
+            ->addFieldToFilter('visibility', Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH)
             ->addAttributeToFilter('status', array('eq' => Mage_Catalog_Model_Product_Status::STATUS_ENABLED));
-        if ($catId):
-            $collection->addCategoryFilter($catId);
-            endif;
+//        if ($catId) {
+//            $collection->addCategoryFilter($catId);
+//        }
 
-        if($sortName):
-            $collection->addAttributeToSort($sortName, $sortDir);
-        endif;
+//        if($sortName) {
+//            $collection->addAttributeToSort($sortName, $sortDir);
+//        }
 
-        return $collection;
+        if (Mage::helper('catalog')->isModuleEnabled('Mage_CatalogInventory')) {
+            $collection->joinField('qty',
+                'cataloginventory/stock_item',
+                'qty',
+                'product_id=entity_id',
+                '{{table}}.stock_id=1',
+                'left');
+        }
+
+        return $collection->getItems();
     }
 
     public function _getCategories()
