@@ -193,15 +193,15 @@ class Istans_Quickorder_IndexController extends Mage_Core_Controller_Front_Actio
             $productsData[] = array_merge($product->getData(), $productAdditionalData);
         }
 
-        $responce = array(
+        $response = array(
             'draw'              => $draw,
             "recordsTotal"      => $countProducts,
             "recordsFiltered"   => $countFilteredProducts,
             'data'              => $productsData
         );
 
-        Mage::helper('core')->jsonEncode($responce);
-        return $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($responce));
+        Mage::helper('core')->jsonEncode($response);
+        return $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($response));
     }
 
     protected function _getCountIds($collection)
@@ -216,5 +216,74 @@ class Istans_Quickorder_IndexController extends Mage_Core_Controller_Front_Actio
         $countProducts = count($collection->getConnection()->fetchCol($idsSelect));
 
         return $countProducts;
+    }
+
+    public function addtoquickorerAction()
+    {
+        /**
+         * @var $block Istans_Quickorder_Block_Index
+         */
+        $block = Mage::getSingleton('core/layout')->createBlock('quickorder/index');
+        $product = Mage::getModel('catalog/product')->load($this->getRequest()->getParam('product_id'));
+        $addToCartUrl = $block->getAddToCartUrl($product);
+
+        return $addToCartUrl;
+    }
+
+    public function quickordertocartAction()
+    {
+        $products = $this->getRequest()->getParam('product');
+        $cart = Mage::getSingleton('checkout/cart')->init();
+        $responseText = '';
+        try {
+            foreach ($products as $productId => $productData) {
+                $product = Mage::getModel('catalog/product')->setStoreId(Mage::app()->getStore()->getId())->load($productId);
+                if ($product->getId()) {
+                    if (($product->getTypeId() == 'simple' && !($product->getRequiredOptions())) || ($product->getTypeId() == 'virtual' && !($product->getRequiredOptions()))) {
+                        if (!array_key_exists('qty', $productData)) {
+                            $params['qty'] = $product->getStockItem()->getMinSaleQty();
+                        } else {
+                            $params['qty'] = $productData['qty'];
+                        }
+                        $cart->addProduct($product->getId(), $params);
+                        unset($product);
+                    }
+                }
+            }
+            $cart->save();
+            Mage::getSingleton('checkout/session')->setCartWasUpdated(true);
+            if (!$cart->getQuote()->getHasError()){
+                $responseText = $this->_getAddToCartResponse();
+            }
+        } catch (Exception $e) {
+            $responseText = $this->_getAddToCartResponse($e->getMessage());
+            Mage::logException($e);
+        }
+
+        return $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($responseText));
+    }
+
+    protected function _getAddToCartResponse($errorMessage = '')
+    {
+        if ('' === $errorMessage) {
+            $response['error'] = false;
+            $response['body'] = $this->_getUpdateMiniCart();
+        } else {
+            $response['error'] = true;
+            $response['body'] = $errorMessage;
+        }
+
+        return $response;
+    }
+
+    protected function _getUpdateMiniCart()
+    {
+        $miniCart = Mage::app()->getLayout()->createBlock('checkout/cart_sidebar', 'cart_sidebar')
+            ->setTemplate('magiccart/magicshop/checkout/cart/mini_cart.phtml');
+        if($miniCart) {
+            return $miniCart->toHtml();
+        }
+
+        return false;
     }
 }
