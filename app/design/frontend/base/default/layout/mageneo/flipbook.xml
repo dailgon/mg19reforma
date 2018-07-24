@@ -35,11 +35,13 @@
 		<reference name="head">
             <!--<action method="removeItem"><type>js</type><script>magiccart/jquery.min.js</script></action>-->
             <!--<action method="addJs"><script>catalogue/extras/jquery.min.1.7.js</script></action>-->
-            <action method="addJs"><script>catalogue/extras/jquery-migrate-1.2.1.js</script></action>
-            <action method="addJs"><script>catalogue/extras/jquery-ui-1.8.20.custom.min.js</script></action>
-            <action method="addJs"><script>catalogue/extras/modernizr.2.5.3.min.js</script></action>
-            <action method="addJs"><script>lib/jquery/noconflict.js</script></action>
-            <action method="addJs"><script>catalogue/lib/hash.js</script></action>
+
+            <!--<action method="addJs"><script>catalogue/extras/jquery-migrate-1.2.1.js</script></action>-->
+            <!--<action method="addJs"><script>catalogue/extras/jquery-ui-1.8.20.custom.min.js</script></action>-->
+            <!--<action method="addJs"><script>catalogue/extras/modernizr.2.5.3.min.js</script></action>-->
+            <!--<action method="addJs"><script>lib/jquery/noconflict.js</script></action>-->
+            <!--<action method="addJs"><script>catalogue/lib/hash.js</script></action>-->
+
             <!--<action method="addJs"><script>lib/jquery/noconflict.js</script><params>defer</params></action>-->
             <!--<action method="addJs"><script>catalogue/lib/hash.js</script><params>defer</params></action>-->
         </reference>
