@@ -225,6 +225,22 @@
                 <update_cron>0 0 * * *</update_cron>
                 <developer>Slava Yurtev</developer>
             </sy_novaposhta>
+            <sy>
+                <active>0</active>
+                <sallowspecific>1</sallowspecific>
+                <specificcountry>UA</specificcountry>
+                <model>sy_novaposhta/carrier_novaposhta</model>
+                <title>Новая Почта</title>
+                <specificerrmsg>Этот способ доставки на текущий момент не доступен. Если вы желаете, чтобы мы доставили заказ Новой Почтой, обратитесь к менеджеру интернет-магазина.</specificerrmsg>
+                <default_length>20</default_length>
+                <default_width>20</default_width>
+                <default_height>20</default_height>
+                <default_weight>20</default_weight>
+                <complete_status>Доставлено</complete_status>
+                <on_air>1</on_air>
+                <update_cron>0 0 * * *</update_cron>
+                <developer>Slava Yurtev</developer>
+            </sy>
         </carriers>
     </default>
 </config>

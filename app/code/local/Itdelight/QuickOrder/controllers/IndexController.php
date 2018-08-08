@@ -172,11 +172,17 @@ class Itdelight_QuickOrder_IndexController extends Mage_Core_Controller_Front_Ac
             $service = Mage::getModel('sales/service_quote', $quote);
             $service->submitAll();
             $increment_id = $service->getOrder()->getRealOrderId();
+            $order = $service->getOrder();
             if($params['comment']){
-                $order = $service->getOrder();
                 $order->addStatusHistoryComment($params['comment']);
-                $order->save();
             }
+            $order->save();
+            if ($order->getCanSendNewEmailFlag()){
+                $order->sendNewOrderEmail();
+            }
+            Mage::getSingleton('checkout/session')->setLastRealOrderId($increment_id);
+            Mage::getSingleton('checkout/session')->setQuoteId($quote->getId());
+            $this->_redirect('popuporder/index/success');
         } catch (Exception $ex) {
             $ex->getMessage();
             return $this->_redirect("*/*");
@@ -184,10 +190,6 @@ class Itdelight_QuickOrder_IndexController extends Mage_Core_Controller_Front_Ac
             $e->getMessage();
             return $this->_redirect("*/*");
         }
-
-        Mage::getSingleton('checkout/session')->setLastRealOrderId($increment_id);
-        Mage::getSingleton('checkout/session')->setQuoteId($quote->getId());
-        $this->_redirect('popuporder/index/success');
     }
 
     public function delete_itemAction()
