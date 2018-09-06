@@ -6,5 +6,5 @@ class Mirasvit_Fpc_Helper_Code extends Mirasvit_MstCore_Helper_Code
     protected $l = "38042";
     protected $v = "1.0.87";
     protected $b = "0";
-    protected $d = "pragmatec.com.ua";
+    protected $d = "reforma.top";
 }
