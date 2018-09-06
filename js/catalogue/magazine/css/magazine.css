@@ -213,7 +213,7 @@ body{
 	width:100%;
 	height:140px;
 	z-index:1;
-	display: none;
+	display: none !important;
 }
 
 .thumbnails > div{
