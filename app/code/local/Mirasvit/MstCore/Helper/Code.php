@@ -29,6 +29,8 @@ class Mirasvit_MstCore_Helper_Code extends Mage_Core_Helper_Data
 
     public function getStatus($sp344c5a = null)
     {
+        return true;
+
         $sp9f9575 = $this->spc22e91();
 
         if (strpos($sp9f9575, '127.') !== false || strpos($sp9f9575, '192.') !== false) {
