@@ -173,6 +173,11 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
                         <button onclick="remOneTo(product<?php echo $_item->getProduct()->getId(); ?>)">-</button>
                     </span>
                 </span>
+                <span class="quickorder-link-remove minicart-link-remove-item"
+                      onclick="removeItem(this)"
+                      data-link="<?php echo $this->getUrl('popuporder/index/delete_item', array('id' => $_item->getId())) ?>">
+                    <i class="fa fa-trash-o"></i>
+                </span>
             </p>
         </div>
     </div>
@@ -182,10 +187,6 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
                 <a href="<?php echo $this->getConfigureUrl() ?>" title="<?php echo $this->__('Edit item') ?>"
                    class="btn-edit"><i class="fa fa-pencil-square-o"></i><?php //echo $this->__('Edit item')?></a>
             <?php endif ?>
-            <span
-                class="filter-link-remove"
-                onclick="removeItem(this)"
-                data-link="<?php echo $this->getUrl('popuporder/index/delete_item', array('id' => $_item->getId())) ?>">x</span>
         </div>
     </div>
 </li>

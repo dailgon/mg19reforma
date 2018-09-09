@@ -175,11 +175,12 @@ class Magiccart_Magicmenu_Block_Menu extends Mage_Catalog_Block_Navigation
             $currentUrl = $this->helper('core/url')->getCurrentUrl();
             foreach ($extMenu as $ext) { 
                 $link = $ext->getLink();
+                $extendedClass = str_replace('\/', '-', $link);
                 $url = (filter_var($link, FILTER_VALIDATE_URL)) ? $link : $this->getUrl($link);
                 $active = ( $link && $url == $currentUrl) ? ' active' : '';
                 $html = $this->getStaticBlock($ext->getExtContent());
                 if($html) $active .=' hasChild';
-                $drawExtraMenu .= "<li class='level0 ext $active $class'>";
+                $drawExtraMenu .= "<li class='level0 ext $active $class $extendedClass'>";
                     if($link) $drawExtraMenu .= '<a class="level-top" href="' .$url. '"><span>' .$this->__($ext->getName()) . $this->getCatLabel($ext). '</span></a>';
                     else $drawExtraMenu .= '<span class="level-top"><span>' .$this->__($ext->getName()) . $this->getCatLabel($ext). '</span></span>';
                     if($html) $drawExtraMenu .= '<div class="level-top-mega">'.$html.'</div>';

@@ -1,6 +1,6 @@
  <?php $posts = $this->getPosts(); ?>
 <?php if (count($posts)): ?>
- <?php echo $this->getChildHtml('blog_comments_toolbar'); ?>
+<!-- --><?php //echo $this->getChildHtml('blog_comments_toolbar'); ?>
     <?php foreach ($posts as $post): ?>
         <div class="postWrapper">
             <div class="postTitle">
@@ -25,7 +25,7 @@
                 <?php endif; ?><?php echo$this->__("By"); ?> <?php echo $post->getUser(); ?></div>
         </div>
     <?php endforeach; ?>
- <?php echo $this->getChildHtml('blog_comments_toolbar'); ?>
+<!-- --><?php //echo $this->getChildHtml('blog_comments_toolbar'); ?>
 <?php else: ?>
     <?php echo Mage::helper('blog')->__('No Posts in this Category.'); ?>
 <?php endif; ?>

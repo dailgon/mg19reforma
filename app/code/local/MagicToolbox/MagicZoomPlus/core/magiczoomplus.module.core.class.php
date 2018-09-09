@@ -197,7 +197,7 @@ if(!defined('MagicZoomPlusModuleCoreClassLoaded')) {
                 $dataImage2x = '';
             }
 
-            return "<a id=\"MagicZoomPlusImage{$id}\" {$dataImage2x} class=\"MagicZoom\" href=\"{$img}\"{$group}{$link}{$title}{$options}><img itemprop=\"image\" src=\"{$thumb}\" {$thumb2x}  alt=\"{$alt}\"{$width}{$height} /></a>{$message}";
+            return "<a id=\"MagicZoomPlusImage{$id}\" {$dataImage2x} class=\"MagicZoom\" href=\"{$img}\"{$group}{$link}{$title}{$options}><img class=\"magic-zoom-plus-image-img\" itemprop=\"image\" src=\"{$thumb}\" {$thumb2x}  alt=\"{$alt}\"{$width}{$height} /></a>{$message}";
         }
 
         /**

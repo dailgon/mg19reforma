@@ -2,15 +2,11 @@
 /** @var $this Itdelight_QuickOrder_Block_Quickorder */
 ?>
 <div id="popup-quickorder" class="root-block-quickorder container">
-
-    <div class="popup-quickorder row">
-
+    <div class="popup-quickorder">
         <span class="close-popup"></span>
-
         <div class="col-sm-6 q-left">
             <span class="head1"><?php echo $this->__("Ordering"); ?></span>
             <span><?php echo $this->__("Fill the form"); ?></span>
-
             <form name="quickorder" id="quickorder" method="post"
                   action="<?php echo Mage::getBaseUrl() . "popuporder/index/place_order"; ?>">
                 <div class="select-wrapper">
@@ -20,19 +16,16 @@
                         <option value="cashondelivery"><?php echo $this->__("cash on delivery"); ?></option>
                     </select>
                 </div>
-
                 <input name="first_name" type="text" placeholder="<?php echo $this->__("First Name"); ?>"
                        class="required-entry"/>
                 <input name="last_name" type="text" placeholder="<?php echo $this->__("Last Name"); ?>"
                        class="required-entry"/>
-
                 <div class="select-wrapper">
                     <select name="destination" id="quickorder-destination-switch" class="required-entry">
                         <option value="warehouse"><?php echo $this->__("To the warehouse"); ?></option>
                         <option value="address"><?php echo $this->__("To the address"); ?></option>
                     </select>
                 </div>
-
                 <!-- configurator -->
                 <div class="select-wrapper">
                     <select name="city" id="warehouse-city" class="required-entry">
@@ -44,7 +37,6 @@
                         <?php endforeach; ?>
                     </select>
                 </div>
-
                 <!-- warehouse -->
                 <div id="warehouse-form" style="display: block">
                     <div class="select-wrapper">
@@ -54,15 +46,13 @@
                     </div>
                 </div>
                 <!-- warehouse END -->
-
                 <!-- address -->
                 <div id="address-form" style="display: none">
                     <input name="street" type="text" placeholder="<?php echo $this->__("Street"); ?>"/>
                     <input name="house" type="text" placeholder="<?php echo $this->__("House"); ?>"/>
-                    <input name="apartment" type="text" placeholder="<?php echo $this->__("Flat"); ?>"/>
+                    <input name="apartment" class="no-required" type="text" placeholder="<?php echo $this->__("Flat"); ?>"/>
                 </div>
                 <!-- address END -->
-
                 <input id="email-qo" class="no-required" name="email" type="text"
                        placeholder="<?php echo $this->__("Email"); ?>"/>
                 <input class="required-entry" name="tel" type="tel"
@@ -70,7 +60,6 @@
                 <label id="show-comment" class="show-comment"
                        for="comment"><?php echo $this->__("Leave comment"); ?></label>
                 <textarea id="comment" class="comment" rows="4" cols="45" name="comment"></textarea>
-
                 <div class="input-wrapper">
                     <input type="checkbox" id="privacy-policy" checked="checked" />
                     <label class="check-policy" for="privacy-policy">
@@ -83,13 +72,9 @@
                 <div class="quickorder__actions">
                     <button id="sendquickorder" class="btn-submit" type="submit"
                             value="Submit"><?php echo $this->__("Checkout"); ?></button>
-
                     <span class="continue-shopping-btn"><?php echo $this->__("Continue shopping"); ?></span>
-
                 </div>
-
             </form>
-
         </div>
         <div class="col-sm-6 q-right">
             <script type="text/javascript">
@@ -137,18 +122,15 @@
 </div>
 <script type="text/javascript">
     jQuery(document).ready(function () {
-
         jQuery('.filter-link').click(function () {
             window.open(jQuery(this).data('link'), "_self");
             return false;
         });
-
         jQuery(".show-popup-quick-order").click(function () {
             jQuery("#popup-quickorder").fadeIn(200);
             jQuery('body').toggleClass('popup-shown');
             return false;
         });
-
         jQuery(".root-block-quickorder").click(function () {
             jQuery("#popup-quickorder").fadeOut(200);
             jQuery('body').removeClass('popup-shown');
@@ -157,15 +139,12 @@
         jQuery('.close-popup, .continue-shopping-btn').on('click', function () {
             jQuery('.root-block-quickorder').trigger('click');
         });
-
         jQuery(".popup-quickorder ").click(function (event) {
             event.stopPropagation();
         });
-
         jQuery("#privacy-policy").click(function () {
             jQuery(".check-policy ").click();
         });
-
         jQuery(".check-policy ").click(function () {
             if (jQuery("#privacy-policy").is(':checked')) {
                 jQuery("#privacy-policy").prop('checked', false);
@@ -173,7 +152,6 @@
                 jQuery("#privacy-policy").prop('checked', true);
             }
         });
-
         jQuery("#show-comment").click(function () {
             if (jQuery("#comment").hasClass("show")) {
                 jQuery("#comment").hide();
@@ -183,7 +161,6 @@
                 jQuery("#comment").addClass("show")
             }
         });
-
         jQuery("#quickorder-destination-switch").on('change', function () {
             var select_val = jQuery("#quickorder-destination-switch").val();
             var warehouse_form = jQuery("#warehouse-form");
@@ -196,7 +173,6 @@
                 address_form.show();
             }
         });
-
         jQuery("#warehouse-city").on('change', function () {
             if (jQuery("#quickorder-destination-switch").val() == "warehouse") {
                 jQuery.ajax({
@@ -215,7 +191,6 @@
                 })
             }
         });
-
         jQuery("#sendquickorder").click(function () {
             var check = true;
             jQuery("#quickorder .validation-failed").each(function () {
@@ -237,7 +212,7 @@
                 jQuery("#address-form input").each(function () {
                     jQuery(this).removeClass('validation-failed');
                 });
-                jQuery("#address-form input").each(function () {
+                jQuery("#address-form input:not([name=apartment])").each(function () {
                     if (this.value == "") {
                         jQuery(this).addClass('validation-failed');
                         check = false;

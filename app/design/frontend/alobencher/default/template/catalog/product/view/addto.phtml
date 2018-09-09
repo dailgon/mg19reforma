@@ -55,6 +55,30 @@
         <?php echo $this->__('Email to a Friend') ?></span></p>
     <?php endif; ?>
 </ul>
+<?php
+$productUrl = urlencode($this->stripTags($_product->getUrlModel()->getProductUrl($_product, null)));
+$shortDescription = urlencode($this->stripTags($_product->getShortDescription()));
+?>
+<ul class="share-to-links">
+    <li>
+        <span onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=<?php echo $productUrl ?>','','menubar=1,resizable=1,width=700,height=600')" title="<?php echo $this->__('Share on Facebook') ?>" class="link-share-facebook">
+            <i class="fa fa-facebook"></i>
+            <?php echo $this->__('Share on Facebook') ?>
+        </span>
+    </li>
+    <li>
+        <span onclick="window.open('https://twitter.com/intent/tweet?url=<?php echo $productUrl ?>&text=<?php echo $shortDescription ?>','','menubar=1,resizable=1,width=700,height=600')" title="<?php echo $this->__('Share on Twitter') ?>" class="link-share-twitter">
+            <i class="fa fa-twitter"></i>
+            <?php echo $this->__('Share on Twitter') ?>
+        </span>
+    </li>
+    <li>
+        <span onclick="window.open('https://plus.google.com/share?url=<?php echo $productUrl ?>','','menubar=1,resizable=1,width=700,height=600')" title="<?php echo $this->__('Share on Google Plus') ?>" class="link-share-google-plus">
+            <i class="fa fa-google-plus"></i>
+            <?php echo $this->__('Share on Google Plus') ?>
+        </span>
+    </li>
+</ul>
 
 <script>
     jQuery('.filter-link').click(function () {

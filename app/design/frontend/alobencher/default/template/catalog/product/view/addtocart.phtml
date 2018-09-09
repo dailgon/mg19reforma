@@ -77,7 +77,7 @@
                             </div>
                         <?php } else {
                             $buttonTitle = Mage::helper('itdelight_seoremarks')->__('Add to Cart');
-                            $buttonUrl = 'setLocation('.$this->getAddToCartUrl($_product).')'; ?>
+                            $buttonUrl = 'setLocation(\''.$this->getAddToCartUrl($_product).'\')'; ?>
                             <button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart pull-left-none <?php echo $_product->getId()?>" onclick="<?php echo $buttonUrl ?>"><span class="fa fa-shopping-cart"><?php echo $buttonTitle ?></span></button>
                         <?php }
                         ?>

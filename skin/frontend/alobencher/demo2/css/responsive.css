@@ -444,10 +444,8 @@
 	.footer-menu-list li{display: inline-block;}
 }
 
-
-
-
-
-
-
-
+@media(min-width:1025px) {
+	.level0.quickorder {
+		display: list-item;
+	}
+}
