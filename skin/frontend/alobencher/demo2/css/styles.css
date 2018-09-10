@@ -3100,3 +3100,9 @@ input[type=number]::-webkit-outer-spin-button {
 .level0.quickorder {
     display: none;
 }
+.postWrapper .post-img {
+    min-height: 20px;
+}
+.postWrapper .post-date {
+    padding-left: 55px;
+}
